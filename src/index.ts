@@ -10,15 +10,19 @@ $(document).ready(function () {
       function load() {
         window.removeEventListener('load', load, false);
 
-        // Delay before the loading complete trigger in MS
+        // Get the delay value from the loader-trigger-delay attribute
+        let delay = $("[loader-content='true']").attr('loader-trigger-delay');
+        delay = parseInt(delay, 10); // Convert the value to an integer in milliseconds
+
+        // Use the delay value for the setTimeout
         setTimeout(function () {
           $("[loader-trigger='true']").click();
-        }, 2000);
+        }, delay);
 
         // Delay before unlocking scroll after load in MS
         setTimeout(function () {
           $('body').removeClass('lock-scroll-loader');
-        }, 2000);
+        }, delay);
       },
       false
     );
