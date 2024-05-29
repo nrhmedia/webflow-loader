@@ -1,5 +1,23 @@
 $(document).ready(function () {
-  if (window.location.hash) {
+  function isBreakpointEnabled() {
+    const isDesktop = $("[loader-content='true']").attr('loader-on-desktop') === 'true';
+    const isTablet = $("[loader-content='true']").attr('loader-on-tablet') === 'true';
+    const isMobileLandscape =
+      $("[loader-content='true']").attr('loader-on-mobile-landscape') === 'true';
+    const isMobilePortrait =
+      $("[loader-content='true']").attr('loader-on-mobile-portrait') === 'true';
+
+    const width = $(window).width();
+
+    if (width >= 992 && !isDesktop) return false; // Desktop (Webflow: 992px and up)
+    if (width >= 768 && width < 992 && !isTablet) return false; // Tablet (Webflow: 768px to 991px)
+    if (width >= 480 && width < 768 && !isMobileLandscape) return false; // Mobile Landscape (Webflow: 480px to 767px)
+    if (width < 480 && !isMobilePortrait) return false; // Mobile Portrait (Webflow: up to 479px)
+
+    return true;
+  }
+
+  if (window.location.hash || !isBreakpointEnabled()) {
     $("[loader-content='true']").hide();
   } else {
     $("[loader-content='true']").show();
@@ -10,15 +28,22 @@ $(document).ready(function () {
       function load() {
         window.removeEventListener('load', load, false);
 
-        // Delay before the loading complete trigger in MS
+        // Get the delay values from the respective attributes
+        let triggerDelay = $("[loader-content='true']").attr('loader-trigger-delay');
+        let scrollDelay = $("[loader-content='true']").attr('loader-scroll-delay');
+
+        triggerDelay = parseInt(triggerDelay, 10); // Convert the value to an integer in milliseconds
+        scrollDelay = parseInt(scrollDelay, 10); // Convert the value to an integer in milliseconds
+
+        // Use the trigger delay value for the setTimeout
         setTimeout(function () {
           $("[loader-trigger='true']").click();
-        }, 2000);
+        }, triggerDelay);
 
-        // Delay before unlocking scroll after load in MS
+        // Use the scroll delay value for the setTimeout
         setTimeout(function () {
           $('body').removeClass('lock-scroll-loader');
-        }, 2000);
+        }, scrollDelay);
       },
       false
     );
