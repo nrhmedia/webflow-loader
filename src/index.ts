@@ -38,11 +38,6 @@ $(document).ready(function () {
         // Use the trigger delay value for the setTimeout
         setTimeout(function () {
           $("[loader-trigger='true']").click();
-
-          // Add a slight delay to ensure interaction completes before hiding content
-          setTimeout(function () {
-            $("[loader-content='true']").hide();
-          }, 500); // Adjust this delay as needed to match the interaction duration
         }, triggerDelay);
 
         // Use the scroll delay value for the setTimeout
