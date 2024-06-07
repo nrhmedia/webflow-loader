@@ -36,6 +36,9 @@
           scrollDelay = parseInt(scrollDelay, 10);
           setTimeout(function() {
             $("[loader-trigger='true']").click();
+            setTimeout(function() {
+              $("[loader-content='true']").hide();
+            }, 500);
           }, triggerDelay);
           setTimeout(function() {
             $("body").removeClass("lock-scroll-loader");
