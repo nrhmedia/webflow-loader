@@ -17,35 +17,32 @@ $(document).ready(function () {
     return true;
   }
 
+  function onLoaderComplete() {
+    let triggerDelay = $("[loader-content='true']").attr('loader-trigger-delay');
+    let scrollDelay = $("[loader-content='true']").attr('loader-scroll-delay');
+
+    triggerDelay = parseInt(triggerDelay, 10); // Convert the value to an integer in milliseconds
+    scrollDelay = parseInt(scrollDelay, 10); // Convert the value to an integer in milliseconds
+
+    setTimeout(function () {
+      $("[loader-trigger='true']").click();
+    }, triggerDelay);
+
+    setTimeout(function () {
+      $('body').removeClass('lock-scroll-loader');
+    }, scrollDelay);
+  }
+
   if (window.location.hash || !isBreakpointEnabled()) {
     $("[loader-content='true']").hide();
   } else {
     $("[loader-content='true']").show();
     $('body').addClass('lock-scroll-loader');
 
-    window.addEventListener(
-      'load',
-      function load() {
-        window.removeEventListener('load', load, false);
-
-        // Get the delay values from the respective attributes
-        let triggerDelay = $("[loader-content='true']").attr('loader-trigger-delay');
-        let scrollDelay = $("[loader-content='true']").attr('loader-scroll-delay');
-
-        triggerDelay = parseInt(triggerDelay, 10); // Convert the value to an integer in milliseconds
-        scrollDelay = parseInt(scrollDelay, 10); // Convert the value to an integer in milliseconds
-
-        // Use the trigger delay value for the setTimeout
-        setTimeout(function () {
-          $("[loader-trigger='true']").click();
-        }, triggerDelay);
-
-        // Use the scroll delay value for the setTimeout
-        setTimeout(function () {
-          $('body').removeClass('lock-scroll-loader');
-        }, scrollDelay);
-      },
-      false
-    );
+    if (document.readyState === 'complete') {
+      onLoaderComplete();
+    } else {
+      window.addEventListener('load', onLoaderComplete, false);
+    }
   }
 });
